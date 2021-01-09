@@ -1,7 +1,7 @@
 # Fork of ultralytics/yolov3
 ## Edits to this repo
 * Code to generate PR curves after training runs
-* Code to generate a precision.txt and recall.txt file after training runs. These files contain the precision and recall values respectively that can be used later to make PR curves and also to make multiple PR curves on the same plot using [pr_curve.py](https://github.com/Duke-BC-Deep-Learning-for-Energy-Access/Miscellaneous-Code/blob/main/pr_curve.py) in the Miscellaneous-Code repo.
+* Code to generate a precision.txt and recall.txt file after training runs. These files contain the precision and recall values respectively that can be used later to make PR curves and also to make multiple PR curves on the same plot using [pr_curve.py](https://github.com/Duke-BC-DL-for-Energy-Infrastructure/Miscellaneous-Code/blob/main/pr_curve.py) in the Miscellaneous-Code repo.
 * Reset repo to the commit on Oct 19, 2020 to avoid bugs.
 
 <br/><br/>
