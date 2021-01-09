@@ -206,6 +206,7 @@ def ap_per_class(tp, conf, pred_cls, target_cls):
             ax.set_ylim(0, 1.01)
             fig.tight_layout()
             fig.savefig('PR_curve.png', dpi=300)
+            plt.close(fig)
 
     # Compute F1 score (harmonic mean of precision and recall)
     f1 = 2 * p * r / (p + r + 1e-16)
