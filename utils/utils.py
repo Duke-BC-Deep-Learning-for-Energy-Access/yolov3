@@ -191,6 +191,12 @@ def ap_per_class(tp, conf, pred_cls, target_cls):
             for j in range(tp.shape[1]):
                 ap[ci, j] = compute_ap(recall[:, j], precision[:, j])
 
+            with open('precision.txt', 'w') as filehandle:
+                filehandle.writelines("%s\n" % precision_value for precision_value in precision)
+
+            with open('recall.txt', 'w') as filehandle:
+                filehandle.writelines("%s\n" % recall_value for recall_value in recall)
+
             # Plot
             fig, ax = plt.subplots(1, 1, figsize=(5, 5))
             ax.plot(recall, precision)
