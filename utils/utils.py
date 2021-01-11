@@ -60,6 +60,15 @@ def load_classes(path):
     return list(filter(None, names))  # filter removes empty strings (such as last line)
 
 
+def load_colors(path):
+    # Loads *.txt file at 'path'
+    with open(path, 'r') as f:
+        colors = f.read().split('\n')
+        colors = list(filter(None, colors)) # filter removes empty strings (such as last line)
+        colors = [list(map(int, color.split(',')))[::-1] for color in colors]
+    return colors
+
+
 def labels_to_class_weights(labels, nc=80):
     # Get class weights (inverse frequency) from training labels
     if labels[0] is None:  # no labels loaded
