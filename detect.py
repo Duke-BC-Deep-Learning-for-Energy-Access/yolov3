@@ -7,7 +7,7 @@ from utils.utils import *
 
 def detect(save_img=False):
     imgsz = (320, 192) if ONNX_EXPORT else opt.img_size  # (320, 192) or (416, 256) or (608, 352) for (height, width)
-    out, source, weights, half, view_img, save_txt, remove_bbox_label = opt.output, opt.source, opt.weights, opt.half, opt.view_img, opt.save_txt, opt.remove_bbox_label
+    out, source, weights, half, view_img, save_txt, remove_bbox_labels = opt.output, opt.source, opt.weights, opt.half, opt.view_img, opt.save_txt, opt.remove_bbox_labels
     webcam = source == '0' or source.startswith('rtsp') or source.startswith('http') or source.endswith('.txt')
 
     # Initialize
@@ -132,7 +132,7 @@ def detect(save_img=False):
 
                     if save_img or view_img:  # Add bbox to image
                         label = '%s %.2f' % (names[int(cls)], conf)
-                        if remove_bbox_label:
+                        if remove_bbox_labels:
                             label = None
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)])
 
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     parser.add_argument('--classes', nargs='+', type=int, help='filter by class')
     parser.add_argument('--agnostic-nms', action='store_true', help='class-agnostic NMS')
     parser.add_argument('--augment', action='store_true', help='augmented inference')
-    parser.add_argument('--remove-bbox-label', action='store_true', help='remove the label from bbox in output')
+    parser.add_argument('--remove-bbox-labels', action='store_true', help='remove the labels from bbox in output')
     parser.add_argument('--bbox-colors', type=str, default=None, help='path for *.txt file that contains colors for bounding boxes in output images')
     opt = parser.parse_args()
     opt.cfg = check_file(opt.cfg)  # check file
