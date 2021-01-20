@@ -1,11 +1,19 @@
 # Fork of ultralytics/yolov3
 ## Edits to this repo
-* Code to generate PR curves after training runs
-* Code to generate a precision.txt and recall.txt file after training runs. These files contain the precision and recall values respectively that can be used later to make PR curves and also to make multiple PR curves on the same plot using [pr_curve.py](https://github.com/Duke-BC-DL-for-Energy-Infrastructure/Miscellaneous-Code/blob/main/pr_curve.py) in the Miscellaneous-Code repo.
-* --remove-bbox-labels argument for detect.py to get rid of labels for output images
-* --bbox-color argument for detect.py to specify path of a file to use for the bounding box colors in the output. The file is formated with each line as R,G,B, where these values can vary from 0-225
-* load_colors() function in utils/utils.py that loads a file for bbox colors
+### Overall
 * Reset repo to the commit on Oct 19, 2020 to avoid bugs.
+
+### train.py
+* Code to generate PR curves after training runs
+* Code to generate a precision.txt and recall.txt file after training runs. These files will appear after the training run and will be in the main yolov3 directory. These files contain the precision and recall values respectively that can be used later to make PR curves and also to make multiple PR curves on the same plot using [pr_curve.py](https://github.com/Duke-BC-DL-for-Energy-Infrastructure/Miscellaneous-Code/blob/main/pr_curve.py) in the Miscellaneous-Code repo.
+* Edited the obj paramter in train.py to be set default to 120.0
+
+### detect.py
+* --remove-bbox-labels argument for detect.py to get rid of labels for output images. Defaults to false, so adding the argument when calling detect.py would set this to true and remove the bounding box labels
+* --bbox-colors argument for detect.py to specify path of a file to use for the bounding box colors in the output. The file is formated with each line as R,G,B, where these values can vary from 0-225. Each line corresponds with a class, so if there are two classes, the first class would use the color in the first line in the file and the second class would use the color in the second line in the file. Also added a file to use with --box-colors, which is called bbox_colors.txt and is located in the main directory of the repo. To use this when calling detect.py, you would add the argument --bbox-colors bbox_colors.txt. The file has a blue color on the first line, then green, then cyan, and then magenta.
+
+### utils.py
+* load_colors() function in utils/utils.py that loads a file for bbox colors. Used internally when the --bbox-colors argument is added.
 
 <br/><br/>
 
