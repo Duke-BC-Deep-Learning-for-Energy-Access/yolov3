@@ -154,7 +154,7 @@ def is_small(bbox):
 
     # Compute area in pixels^2 and return 1 if smaller than threshold
     area = bbox[2] * bbox[3] * 608 * 608
-    if area < opt.small_turbine_threshold:
+    if area < opt.small_turbine_thres:
         return 1
     else:
         return 0
@@ -171,7 +171,7 @@ def get_sizes(bboxes):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='small_and_large_turbine_metrics.py')
     parser.add_argument('--iou-thres', type=float, default=0.0, help='IOU threshold for determining correct detection')
-    parser.add_argument('--small-turbine-threshold', type=float, default=350.0, help='Value in pixels squared that determines whether a turbine is small or not')
+    parser.add_argument('--small-turbine-thres', type=float, default=350.0, help='Value in pixels squared that determines whether a turbine is small or not')
     parser.add_argument('--save-txt', action='store_true')
     parser.add_argument('--val-path', type=str, default='../data/val')
     parser.add_argument('--output-path', type=str, default='output')
