@@ -16,7 +16,7 @@
 * load_colors() function in utils/utils.py that loads a file for bbox colors. Used internally when the --bbox-colors argument is added.
 
 ### small_and_large_turbine_metrics.py
-* Module used to compute precision and recall and F1 score for small and large turbines separately
+* Module used to compute precision and recall and F1 score for small and large turbines separately at a single confidence and iou threshold
 * Before using this, make sure to create the 'val' folder (the folder of validation images) and run detect.py on the folder with the argument --save-txt. Then to run the code, run `!python3 small_and_large_turbine_metrics.py` (need '!' for colab, but don't need it for terminal) and put any specific arguments afterwards.
 * To see the arguments, check the argument parser in the code. The arguments include paths, but those are set default to the correct paths given you're running the prepared notebooks. Two important arguments are --iou-thres which determines the iou needed for a bbox to be counted correct (default is set to 0.0) and --small-turbine-thres which is the pixels^2 value that determines whether a turbine is classified as small or not (default set to 350.0).
 
