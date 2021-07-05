@@ -187,6 +187,11 @@ def test(cfg,
     pf = '%20s' + '%10.3g' * 6  # print format
     print(pf % ('all', seen, nt.sum(), mp, mr, map, mf1))
 
+    # Save results to .txt file
+    with open('test_results.txt', 'w') as f:
+        f.write(s + '\n')
+        f.write(pf % ('all', seen, nt.sum(), mp, mr, map, mf1))
+
     # Print results per class
     if verbose and nc > 1 and len(stats):
         for i, c in enumerate(ap_class):
