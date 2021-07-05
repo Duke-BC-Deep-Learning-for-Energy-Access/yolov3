@@ -1,0 +1,140 @@
+import argparse
+from train import main as train
+from test import main as test
+import os
+import glob
+import shutil
+
+
+# Provide output folder, and should run each condition for each experiment/region pair four times
+# - Would like to create a config class that we can just pass into train.py
+# - Want outputs to be generated in separate locations for each experiment, condition, and run so that no results
+#  are overwritten
+#     - Could just move the results into a specific folder after running train.py or test.py if it isn't easy to specify
+#     how the results should be saved
+RESULTS_FILES = ['results.txt', 'results.png', 'precision.txt', 'recall.txt', 'PR_curve.png', 'test_results.txt']
+
+
+class TestConfig:
+    def __init__(self,
+                 cfg='cfg/yolov3-spp.cfg',
+                 data=None,
+                 weights='weights/last.pt',
+                 batch_size=8,
+                 img_size=608,
+                 conf_thres=0.0001,
+                 iou_thres=0.6,
+                 save_json=False,
+                 task='test',
+                 device=0,
+                 single_cls=True,
+                 augment=False):
+        self.cfg = cfg
+        self.data = data
+        self.weights = weights
+        self.batch_size = batch_size
+        self.img_size = img_size
+        self.conf_thres = conf_thres
+        self.iou_thres = iou_thres
+        self.save_json = save_json
+        self.task = task
+        self.device = device
+        self.single_cls = single_cls
+        self.augment = augment
+
+
+class TrainingConifg:
+    def __init__(self,
+                 epochs=300,
+                 batch_size=8,
+                 cfg='cfg/yolov3-spp.cfg',
+                 data=None,
+                 multi_scale=False,
+                 img_size=608,
+                 rect=False,
+                 resume=False,
+                 nosave=False,
+                 notest=False,
+                 evolve=False,
+                 bucket='',
+                 cache_images=False,
+                 weights='weights/yolov3-spp-ultralytics.pt',
+                 name='',
+                 device=0,
+                 adam=True,
+                 single_cls=True,
+                 freeze_layers=False,
+                 results_file='results.txt'):
+        self.epochs = epochs
+        self.batch_size = batch_size
+        self.cfg = cfg
+        self.data = data
+        self.multi_scale = multi_scale
+        self.img_size = img_size
+        self.rect = rect
+        self.resume = resume
+        self.nosave = nosave
+        self.notest = notest
+        self.evolve = evolve
+        self.bucket = bucket
+        self.cache_images = cache_images
+        self.weights = weights
+        self.name = name
+        self.device = device
+        self.adam = adam
+        self.single_cls = single_cls
+        self.freeze_layers = freeze_layers
+        self.results_file = results_file
+
+
+def main(args):
+    runs = args.runs
+    experiments_folder = args.experiments_folder
+    results_dir = args.results_dir
+    assert os.path.isdir(experiments_folder), f'Experiments folder {experiments_folder} is not a valid directory'
+
+    if not os.path.exists(results_dir):
+        os.mkdir(results_dir)
+
+    experiments = os.listdir(experiments_folder)
+    for experiment in experiments:
+        experiment_results_folder = os.path.join(results_dir, experiment)
+        if not os.path.exists(experiment_results_folder):
+            os.mkdir(experiment_results_folder)
+
+        conditions = os.listdir(os.path.join(experiments_folder, experiment))
+        for condition in conditions:
+            data = glob.glob(os.path.join(experiments_folder, experiment, condition, '*.data'))[0]
+
+            condition_results_folder = os.path.join(experiment_results_folder, condition)
+            if not os.path.exists(condition_results_folder):
+                os.mkdir(condition_results_folder)
+
+            for run in range(runs):
+                train_config = TrainingConifg()
+                train_config.data = data
+                train(opt=train_config)
+
+                # Need to run test.py and get results from that
+                test_config = TestConfig()
+                test_config.data = data
+                test(opt=test_config)
+
+                # After training and testing, move the results to a unique folder so they don't get overwritten
+                # results.txt, precision.txt, recall.txt, results.png, PR_curve.png, test_results.txt
+                run_folder = os.path.join(condition_results_folder, f'run-{run}')
+                if not os.path.exists(run_folder):
+                    os.mkdir(run_folder)
+                print(run_folder)
+                # shutil.copy() # TODO copy all files in RESULTS_FILES to a new directory that we create to save results
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--experiments-folder', type=str, default='experiments',
+                        help='Experiments folder generated by setup. Will run each')
+    parser.add_argument('--runs', type=int, default=4, help='Number of runs to complete for each condition')
+    parser.add_argument('--results-dir', type=str, default='experiment_results',
+                        help='Path to directory to save training and testing results')
+    args = parser.parse_args()
+    main(args)
