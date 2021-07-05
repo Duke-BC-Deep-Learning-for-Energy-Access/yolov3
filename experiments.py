@@ -5,12 +5,7 @@ import os
 import glob
 import shutil
 
-# Provide output folder, and should run each condition for each experiment/region pair four times
-# - Would like to create a config class that we can just pass into train.py
-# - Want outputs to be generated in separate locations for each experiment, condition, and run so that no results
-#  are overwritten
-#     - Could just move the results into a specific folder after running train.py or test.py if it isn't easy to specify
-#     how the results should be saved
+# Paths to files that are generated from training/testing to move into the results folder for each run
 RESULTS_FILES = ['results.txt', 'results.png', 'precision.txt', 'recall.txt', 'PR_curve.png', 'test_results.txt']
 
 
