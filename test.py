@@ -8,7 +8,8 @@ from utils.datasets import *
 from utils.utils import *
 
 
-def test(cfg,
+def test(opt,
+         cfg,
          data,
          weights=None,
          batch_size=16,
@@ -242,7 +243,8 @@ def main(opt):
 
     # task = 'test', 'study', 'benchmark'
     if opt.task == 'test':  # (default) test normally
-        test(opt.cfg,
+        test(opt,
+             opt.cfg,
              opt.data,
              opt.weights,
              opt.batch_size,

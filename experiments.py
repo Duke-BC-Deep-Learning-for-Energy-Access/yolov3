@@ -75,7 +75,7 @@ class TestConfig(Conifg):
                  data=None,
                  weights='weights/last.pt',
                  batch_size=8,
-                 img_size=[608, 608],
+                 img_size=608,
                  conf_thres=0.0001,
                  iou_thres=0.6,
                  save_json=False,
@@ -125,19 +125,19 @@ def main(args):
                 if not os.path.exists(run_results_folder):
                     os.mkdir(run_results_folder)
 
+                print(f'---------------- Running training for {run_results_folder} ----------------')
                 train_config = TrainingConifg()
                 train_config.data = data
                 train_config.save(os.path.join(run_results_folder, 'train_config.txt'))
                 train(opt=train_config)
 
-                # Need to run test.py and get results from that
+                print(f'---------------- Running testing for {run_results_folder} ----------------')
                 test_config = TestConfig()
                 test_config.data = data
                 train_config.save(os.path.join(run_results_folder, 'test_config.txt'))
                 test(opt=test_config)
 
                 # After training and testing, move the results to a unique folder so they don't get overwritten
-                print(run_results_folder)
                 for src in RESULTS_FILES:
                     if not os.path.isfile(src):
                         print(f'Warning: could not find {src} to copy into results file')
@@ -145,7 +145,7 @@ def main(args):
                     dst = os.path.join(run_results_folder, os.path.basename(src))
                     shutil.move(src, dst)
 
-                # TODO generate summary PR curve for all runs for each condition
+            # TODO generate summary PR curve for all runs for each condition
 
 
 if __name__ == '__main__':

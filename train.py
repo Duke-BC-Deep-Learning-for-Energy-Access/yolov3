@@ -11,7 +11,7 @@ from utils.datasets import *
 from utils.utils import *
 
 
-def train(opt, hyp, device, mixed_precision, tb_writer):
+def train(opt, hyp, device, mixed_precision, tb_writer, wdir, last, best):
     cfg = opt.cfg
     data = opt.data
     epochs = opt.epochs  # 500200 batches at bs 64, 117263 images = 273 epochs
@@ -281,7 +281,8 @@ def train(opt, hyp, device, mixed_precision, tb_writer):
         final_epoch = epoch + 1 == epochs
         if not opt.notest or final_epoch:  # Calculate mAP
             is_coco = any([x in data for x in ['coco.data', 'coco2014.data', 'coco2017.data']]) and model.nc == 80
-            results, maps = test.test(cfg,
+            results, maps = test.test(opt,
+                                      cfg,
                                       data,
                                       batch_size=batch_size,
                                       imgsz=imgsz_test,
@@ -408,7 +409,14 @@ def main(opt):
     if not opt.evolve:  # Train normally
         print('Start Tensorboard with "tensorboard --logdir=runs", view at http://localhost:6006/')
         tb_writer = SummaryWriter(comment=opt.name)
-        train(opt, hyp, device, mixed_precision, tb_writer)  # train normally
+        train(opt=opt,
+              hyp=hyp,
+              device=device,
+              mixed_precision=mixed_precision,
+              tb_writer=tb_writer,
+              wdir=wdir,
+              last=last,
+              best=best)  # train normally
 
     else:  # Evolve hyperparameters (optional)
         opt.notest, opt.nosave = True, True  # only test/save final epoch
@@ -454,7 +462,14 @@ def main(opt):
                 hyp[k] = np.clip(hyp[k], v[0], v[1])
 
             # Train mutation
-            results = train(opt, hyp.copy(), device, mixed_precision, tb_writer)
+            results = train(opt=opt,
+                            hyp=hyp.copy(),
+                            device=device,
+                            mixed_precision=mixed_precision,
+                            tb_writer=tb_writer,
+                            wdir=wdir,
+                            last=last,
+                            best=best)
 
             # Write mutation results
             print_mutation(hyp, results, opt.bucket)
