@@ -25,34 +25,6 @@ class Conifg:
                 f.write(f'{key}: {value}\n')
 
 
-class TestConfig(Conifg):
-    def __init__(self,
-                 cfg='cfg/yolov3-spp.cfg',
-                 data=None,
-                 weights='weights/last.pt',
-                 batch_size=8,
-                 img_size=608,
-                 conf_thres=0.0001,
-                 iou_thres=0.6,
-                 save_json=False,
-                 task='test',
-                 device=0,
-                 single_cls=True,
-                 augment=False):
-        self.cfg = cfg
-        self.data = data
-        self.weights = weights
-        self.batch_size = batch_size
-        self.img_size = img_size
-        self.conf_thres = conf_thres
-        self.iou_thres = iou_thres
-        self.save_json = save_json
-        self.task = task
-        self.device = device
-        self.single_cls = single_cls
-        self.augment = augment
-
-
 class TrainingConifg(Conifg):
     def __init__(self,
                  epochs=300,
@@ -60,7 +32,7 @@ class TrainingConifg(Conifg):
                  cfg='cfg/yolov3-spp.cfg',
                  data=None,
                  multi_scale=False,
-                 img_size=608,
+                 img_size=[608, 608],
                  rect=False,
                  resume=False,
                  nosave=False,
@@ -70,9 +42,9 @@ class TrainingConifg(Conifg):
                  cache_images=False,
                  weights='weights/yolov3-spp-ultralytics.pt',
                  name='',
-                 device=0,
+                 device='0',
                  adam=True,
-                 single_cls=True,
+                 single_cls=False,
                  freeze_layers=False,
                  results_file='results.txt'):
         self.epochs = epochs
@@ -95,6 +67,34 @@ class TrainingConifg(Conifg):
         self.single_cls = single_cls
         self.freeze_layers = freeze_layers
         self.results_file = results_file
+
+
+class TestConfig(Conifg):
+    def __init__(self,
+                 cfg='cfg/yolov3-spp.cfg',
+                 data=None,
+                 weights='weights/last.pt',
+                 batch_size=8,
+                 img_size=[608, 608],
+                 conf_thres=0.0001,
+                 iou_thres=0.6,
+                 save_json=False,
+                 task='test',
+                 device='0',
+                 single_cls=False,
+                 augment=False):
+        self.cfg = cfg
+        self.data = data
+        self.weights = weights
+        self.batch_size = batch_size
+        self.img_size = img_size
+        self.conf_thres = conf_thres
+        self.iou_thres = iou_thres
+        self.save_json = save_json
+        self.task = task
+        self.device = device
+        self.single_cls = single_cls
+        self.augment = augment
 
 
 def main(args):

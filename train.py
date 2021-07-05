@@ -11,7 +11,7 @@ from utils.datasets import *
 from utils.utils import *
 
 
-def train(hyp, device, mixed_precision, tb_writer):
+def train(opt, hyp, device, mixed_precision, tb_writer):
     cfg = opt.cfg
     data = opt.data
     epochs = opt.epochs  # 500200 batches at bs 64, 117263 images = 273 epochs
@@ -408,7 +408,7 @@ def main(opt):
     if not opt.evolve:  # Train normally
         print('Start Tensorboard with "tensorboard --logdir=runs", view at http://localhost:6006/')
         tb_writer = SummaryWriter(comment=opt.name)
-        train(hyp, device, mixed_precision, tb_writer)  # train normally
+        train(opt, hyp, device, mixed_precision, tb_writer)  # train normally
 
     else:  # Evolve hyperparameters (optional)
         opt.notest, opt.nosave = True, True  # only test/save final epoch
@@ -454,7 +454,7 @@ def main(opt):
                 hyp[k] = np.clip(hyp[k], v[0], v[1])
 
             # Train mutation
-            results = train(hyp.copy(), device, mixed_precision, tb_writer)
+            results = train(opt, hyp.copy(), device, mixed_precision, tb_writer)
 
             # Write mutation results
             print_mutation(hyp, results, opt.bucket)
