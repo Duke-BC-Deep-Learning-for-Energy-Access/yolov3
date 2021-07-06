@@ -6,7 +6,8 @@ import glob
 import shutil
 
 # Paths to files that are generated from training/testing to move into the results folder for each run
-RESULTS_FILES = ['results.txt', 'results.png', 'precision.txt', 'recall.txt', 'PR_curve.png', 'test_results.txt']
+RESULTS_FILES = ['results.txt', 'results.png', 'precision.txt', 'recall.txt', 'PR_curve.png', 'test_results.txt',
+                 'weights/last.pt']
 
 
 class Conifg:
