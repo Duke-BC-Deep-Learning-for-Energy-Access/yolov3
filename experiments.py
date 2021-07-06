@@ -23,7 +23,7 @@ class Conifg:
 class TrainingConifg(Conifg):
     def __init__(self,
                  epochs=300,
-                 batch_size=8,
+                 batch_size=10,
                  cfg='cfg/yolov3-spp.cfg',
                  data=None,
                  multi_scale=False,
@@ -69,7 +69,7 @@ class TestConfig(Conifg):
                  cfg='cfg/yolov3-spp.cfg',
                  data=None,
                  weights='weights/last.pt',
-                 batch_size=8,
+                 batch_size=10,
                  img_size=608,
                  conf_thres=0.0001,
                  iou_thres=0.6,
