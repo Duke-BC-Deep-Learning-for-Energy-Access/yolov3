@@ -120,27 +120,27 @@ def main(args):
                 run_results_folder = os.path.join(condition_results_folder, f'run-{run}')
                 if not os.path.exists(run_results_folder):
                     os.mkdir(run_results_folder)
+                while not os.path.exists(os.path.join(run_results_folder, 'results.png')):
+                    print(f'---------------- Running training for {run_results_folder} ----------------')
+                    train_config = TrainingConifg()
+                    train_config.data = data
+                    train_config.save(os.path.join(run_results_folder, 'train_config.txt'))
+                    train(opt=train_config)
 
-                print(f'---------------- Running training for {run_results_folder} ----------------')
-                train_config = TrainingConifg()
-                train_config.data = data
-                train_config.save(os.path.join(run_results_folder, 'train_config.txt'))
-                train(opt=train_config)
+                    print(f'---------------- Running testing for {run_results_folder} ----------------')
+                    test_config = TestConfig()
+                    test_config.data = data
+                    train_config.save(os.path.join(run_results_folder, 'test_config.txt'))
+                    test(opt=test_config)
 
-                print(f'---------------- Running testing for {run_results_folder} ----------------')
-                test_config = TestConfig()
-                test_config.data = data
-                train_config.save(os.path.join(run_results_folder, 'test_config.txt'))
-                test(opt=test_config)
-
-                # After training and testing, move the results to a unique folder so they don't get overwritten
-                for src in RESULTS_FILES:
-                    if not os.path.isfile(src):
-                        print(f'Warning: could not find {src} to copy into results file')
-                        continue
-                    dst = os.path.join(run_results_folder, os.path.basename(src))
-                    shutil.move(src, dst)
-
+                    # After training and testing, move the results to a unique folder so they don't get overwritten
+                    for src in RESULTS_FILES:
+                        if not os.path.isfile(src):
+                            print(f'Warning: could not find {src} to copy into results file')
+                            continue
+                        dst = os.path.join(run_results_folder, os.path.basename(src))
+                        shutil.move(src, dst)
+                print('results.png exists, so done with this run')
             # TODO generate summary PR curve for all runs for each condition
 
 
