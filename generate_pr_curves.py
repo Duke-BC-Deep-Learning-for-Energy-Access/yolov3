@@ -25,8 +25,8 @@ def main(args):
             condition_results_folder = os.path.join(experiment_results_folder, condition)
             if not os.path.exists(condition_results_folder):
                 os.mkdir(condition_results_folder)
-
             fig, ax = plt.subplots(1, 1, figsize=(5, 5))
+            avg_map = 0
             for run in range(runs):
                 run_results_folder = os.path.join(condition_results_folder, f'run-{run}')
                 precision_file = os.path.join(run_results_folder, 'precision.txt')
@@ -43,6 +43,17 @@ def main(args):
                     recall = [float(line.strip('[]')) for line in lines]
 
                 ax.plot(recall, precision, label=os.path.basename(run_results_folder))
+
+                test_results_file = os.path.join(run_results_folder, 'test_results.txt')
+                assert os.path.exists(test_results_file), f'{test_results_file} does not exist'
+                with open(test_results_file, 'r') as f:
+                    f.readline()
+                    metrics_line = f.readline()
+                    map = metrics_line.split(' ')[5]
+                print(map)
+                avg_map += map
+            avg_map /= runs
+
             ax.set_xlabel('Recall')
             ax.set_ylabel('Precision')
             ax.set_xlim(0, 1.01)
