@@ -2,7 +2,6 @@ import os
 import matplotlib.pyplot as plt
 import numpy
 import argparse
-from utils.utils import plot_pr_curve_comparison
 
 
 def main(args):
@@ -59,7 +58,7 @@ def main(args):
             ax.set_xlim(0, 1.01)
             ax.set_ylim(0, 1.01)
             ax.legend(loc='best')
-            ax.title(f'{experiment}_{condition}.png')
+            ax.title(f'{experiment}_{condition}')
             fig.tight_layout()
             output_path = os.path.join(condition_results_folder, f'PR_curve_{experiment}_{condition}.png')
             fig.savefig(output_path, dpi=300)
