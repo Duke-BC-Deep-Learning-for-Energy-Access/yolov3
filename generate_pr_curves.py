@@ -25,7 +25,7 @@ def main(args):
             if not os.path.exists(condition_results_folder):
                 os.mkdir(condition_results_folder)
             fig, ax = plt.subplots(1, 1, figsize=(5, 5))
-            avg_map = 0
+            avg_ap = 0
             for run in range(runs):
                 run_results_folder = os.path.join(condition_results_folder, f'run-{run}')
                 precision_file = os.path.join(run_results_folder, 'precision.txt')
@@ -48,17 +48,17 @@ def main(args):
                 with open(test_results_file, 'r') as f:
                     f.readline()
                     metrics_line = f.readline()
-                    map = metrics_line.split(' ')[5]
-                print(map)
-                avg_map += map
-            avg_map /= runs
-
+                    ap = float(list(filter(None, metrics_line.split(' ')))[5])
+                avg_ap += ap
+            avg_ap /= runs
+            print(f'{condition_results_folder} average AP@0.5: {avg_ap:.3}')
+  
             ax.set_xlabel('Recall')
             ax.set_ylabel('Precision')
             ax.set_xlim(0, 1.01)
             ax.set_ylim(0, 1.01)
             ax.legend(loc='best')
-            ax.title(f'{experiment}_{condition}')
+            ax.set_title(f'{experiment}_{condition}')
             fig.tight_layout()
             output_path = os.path.join(condition_results_folder, f'PR_curve_{experiment}_{condition}.png')
             fig.savefig(output_path, dpi=300)
